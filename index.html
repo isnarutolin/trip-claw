@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TClaw 产品 Roadmap 2026</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: #f0f2f5; padding: 30px; margin: 0; }
+.container { max-width: 1500px; margin: 0 auto; }
+h1 { text-align: center; color: #2C3E50; margin-bottom: 5px; font-size: 26px; }
+.subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+.toolbar { text-align: center; margin-bottom: 20px; }
+.toolbar button { padding: 8px 16px; margin: 0 6px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+.btn-export { background: #4ECDC4; color: white; }
+.btn-export:hover { background: #3db8b0; }
+.btn-reset { background: #e74c3c; color: white; }
+.btn-reset:hover { background: #c0392b; }
+.btn-collapse { background: #95a5a6; color: white; }
+.btn-collapse:hover { background: #7f8c8d; }
+.sync-status { display: inline-block; margin-left: 12px; font-size: 12px; padding: 4px 10px; border-radius: 10px; }
+.sync-status.connected { background: #d4edda; color: #155724; }
+.sync-status.disconnected { background: #f8d7da; color: #721c24; }
+.progress-bar { background: #e0e0e0; border-radius: 10px; height: 8px; margin: 0 auto 25px; max-width: 800px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #4ECDC4, #45B7D1, #F4A460, #FF6B6B); transition: width 0.5s; }
+.progress-text { text-align: center; font-size: 12px; color: #888; margin-bottom: 20px; }
+
+.timeline { display: flex; gap: 16px; position: relative; align-items: flex-start; }
+.timeline::before { content: ''; position: absolute; top: 38px; left: 0; right: 0; height: 4px; background: #2C3E50; z-index: 0; }
+
+.phase { flex: 1; position: relative; z-index: 1; min-width: 0; }
+.phase-dot { width: 34px; height: 34px; border-radius: 50%; margin: 22px auto 0; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.phase-date { text-align: center; font-weight: bold; color: #2C3E50; margin-top: 8px; font-size: 13px; }
+.phase-card { margin-top: 12px; border-radius: 12px; padding: 14px; border-left: 4px solid; background: white; box-shadow: 0 2px 12px rgba(0,0,0,0.08); transition: box-shadow 0.2s; }
+.phase-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+.phase-title { font-size: 13px; font-weight: bold; margin-bottom: 2px; }
+.phase-target { font-size: 11px; color: #666; margin-bottom: 10px; font-style: italic; }
+
+.group { margin-bottom: 10px; }
+.group-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; cursor: pointer; }
+.group-title { font-size: 11px; font-weight: bold; padding: 2px 8px; border-radius: 4px; display: inline-block; color: white; }
+.group-toggle { font-size: 10px; color: #999; }
+.group-items { list-style: none; padding: 0; margin: 0; }
+.group-items.collapsed { display: none; }
+
+.item { display: flex; align-items: flex-start; gap: 6px; padding: 3px 0; border-radius: 4px; transition: background 0.15s; }
+.item:hover { background: #f8f9fa; }
+.item input[type="checkbox"] { margin-top: 3px; cursor: pointer; flex-shrink: 0; }
+.item label { font-size: 11.5px; color: #333; cursor: pointer; flex: 1; line-height: 1.4; }
+.item.done label { text-decoration: line-through; color: #aaa; }
+.priority { font-size: 10px; font-weight: bold; padding: 1px 4px; border-radius: 3px; margin-right: 3px; }
+.priority.p0 { background: #fde8e8; color: #e74c3c; }
+.priority.p1 { background: #fef3e2; color: #f39c12; }
+.priority.p2 { background: #edf2f7; color: #95a5a6; }
+
+.add-item { display: flex; gap: 4px; margin-top: 6px; }
+.add-item input { flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 4px 8px; font-size: 11px; outline: none; }
+.add-item input:focus { border-color: #4ECDC4; }
+.add-item select { border: 1px solid #ddd; border-radius: 4px; padding: 4px; font-size: 10px; }
+.add-item button { background: #4ECDC4; color: white; border: none; border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer; white-space: nowrap; }
+.add-item button:hover { background: #3db8b0; }
+
+.add-group { margin-top: 8px; }
+.add-group button { background: none; border: 1px dashed #ccc; border-radius: 4px; padding: 4px 10px; font-size: 11px; color: #999; cursor: pointer; width: 100%; }
+.add-group button:hover { border-color: #4ECDC4; color: #4ECDC4; }
+.add-group-form { display: flex; gap: 4px; margin-top: 4px; }
+.add-group-form input { flex: 1; border: 1px solid #ddd; border-radius: 4px; padding: 4px 8px; font-size: 11px; }
+.add-group-form button { background: #4ECDC4; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; cursor: pointer; }
+
+.phase1 .phase-dot, .phase1 .group-title { background: #4ECDC4; }
+.phase1 .phase-card { border-left-color: #4ECDC4; }
+.phase1 .phase-title { color: #4ECDC4; }
+
+.phase2 .phase-dot, .phase2 .group-title { background: #45B7D1; }
+.phase2 .phase-card { border-left-color: #45B7D1; }
+.phase2 .phase-title { color: #45B7D1; }
+
+.phase3 .phase-dot, .phase3 .group-title { background: #F4A460; }
+.phase3 .phase-card { border-left-color: #F4A460; }
+.phase3 .phase-title { color: #F4A460; }
+
+.phase4 .phase-dot, .phase4 .group-title { background: #FF6B6B; }
+.phase4 .phase-card { border-left-color: #FF6B6B; }
+.phase4 .phase-title { color: #FF6B6B; }
+
+.legend { text-align: center; margin-top: 25px; font-size: 11px; color: #999; }
+.legend span { margin: 0 8px; }
+
+@media (max-width: 1200px) {
+  .timeline { flex-wrap: wrap; }
+  .phase { flex: 1 1 45%; }
+}
+@media (max-width: 768px) {
+  body { padding: 15px; }
+  .timeline { flex-direction: column; }
+  .timeline::before { display: none; }
+  .phase { flex: 1 1 100%; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>TClaw 产品 Roadmap 2026</h1>
+<p class="subtitle">程管家智能助手 | 从内测到全量上线 | 多人协同实时同步</p>
+
+<div class="toolbar">
+  <button class="btn-export" onclick="exportData()">📥 导出JSON</button>
+  <button class="btn-collapse" onclick="toggleAll()">📂 展开/折叠</button>
+  <button class="btn-reset" onclick="resetAll()">🔄 恢复默认</button>
+  <span class="sync-status disconnected" id="syncStatus">⏳ 连接中...</span>
+</div>
+
+<div class="progress-text" id="progressText">总进度: 0/0 (0%)</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+<div class="timeline" id="timeline"></div>
+
+<div class="legend">
+  <span class="priority p0">P0</span> 最高优先级
+  <span class="priority p1">P1</span> 高优先级
+  <span class="priority p2">P2</span> 正常优先级
+  &nbsp;|&nbsp; 🔄 数据实时同步 · 多人协同
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+// ===== Firebase 配置 =====
+const firebaseConfig = {
+  apiKey: "AIzaSyBYmu5gPrCKQw_g708AbXsrk-e-PdX5IHc",
+  authDomain: "trip-claw.firebaseapp.com",
+  databaseURL: "https://trip-claw-default-rtdb.firebaseio.com",
+  projectId: "trip-claw",
+  storageBucket: "trip-claw.firebasestorage.app",
+  messagingSenderId: "696953475194",
+  appId: "1:696953475194:web:80c4ecf58b96b947aaabc3"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dataRef = ref(db, 'roadmap/v1');
+
+// ===== 默认数据 =====
+const DEFAULT_DATA = [
+  {
+    id: 'phase1', date: '6月18日', title: '专家模式网页版内测', target: '业务智囊团',
+    groups: [
+      { name: '诊断能力', items: [
+        { text: 'ebk站内数据查询', p: 'p0', done: true },
+        { text: '飞书文档内容读取', p: 'p0', done: false },
+        { text: 'hdata诊断页面数据', p: 'p1', done: false },
+        { text: '对齐hdata酒店诊断思路', p: 'p0', done: false },
+        { text: '定价诊断: 接入调价建议skill', p: 'p1', done: false },
+        { text: '促销诊断: 接入促销推荐skill', p: 'p1', done: false },
+        { text: '广告诊断: 接入广告推荐skill', p: 'p1', done: false },
+        { text: '收益调整: 接入收益测算skill', p: 'p1', done: false },
+        { text: '归因分析规则反哺程管家诊断agent', p: 'p0', done: false },
+        { text: '对接数分谈判报告skills', p: 'p0', done: false },
+      ]},
+      { name: '谈判报告生成', items: [
+        { text: '报告框架优化(模块+容模+业务确认)', p: 'p0', done: false },
+        { text: '生成PPT/Word, 品牌展效果', p: 'p0', done: false },
+        { text: '支持用户上传文档补充内容/调整报告框架', p: 'p1', done: true },
+      ]},
+      { name: '报告润色&发送', items: [
+        { text: '主动记住用户偏好并量化表达', p: 'p1', done: false },
+        { text: '报告生成后支持发送到用户邮箱', p: 'p1', done: false },
+      ]},
+      { name: '会话体验', items: [
+        { text: '首页推荐问: 酒店日常查价', p: 'p0', done: false },
+        { text: '首页推荐问: 酒店谈判报告场景', p: 'p0', done: false },
+        { text: '首页推荐问: 操作手册/数据汇总', p: 'p1', done: false },
+        { text: '关于酒店的价格、促销、广告操作', p: 'p1', done: false },
+        { text: '最近市场热点动态', p: 'p1', done: false },
+        { text: '闲聊: 基本判断+接住非业务话题', p: 'p1', done: false },
+        { text: '联网搜索(行业通识/市场热点/友商近况)', p: 'p0', done: true },
+      ]},
+    ]
+  },
+  {
+    id: 'phase2', date: '7月2日', title: '微信ClawBot内测', target: '业务智囊团',
+    groups: [
+      { name: '操作-促销', items: [
+        { text: '促销报名/暂停/修改(天天特价/出行特惠/积分联盟/优享会)', p: 'p1', done: true },
+      ]},
+      { name: '操作-价量态', items: [
+        { text: '批量改价最低、促销计算器', p: 'p1', done: true },
+      ]},
+      { name: '操作-广告', items: [
+        { text: '金字塔+云梯的报名/暂停/修改', p: 'p1', done: true },
+      ]},
+      { name: '操作-订单', items: [
+        { text: '订单设置', p: 'p2', done: true },
+      ]},
+      { name: '信息识别', items: [
+        { text: '识别用户意图后给操作链接,锁定落地页模块', p: 'p2', done: false },
+      ]},
+      { name: 'ClawBot扫码', items: [
+        { text: 'ebk站内入口', p: 'p1', done: false },
+        { text: '二维码推广: 经营任务下发(借助业务推广)', p: 'p1', done: false },
+      ]},
+      { name: '分流器', items: [
+        { text: '快速模式和专家模式的自动分流', p: 'p1', done: false },
+        { text: '云端浏览器授权扫码设计', p: 'p1', done: false },
+      ]},
+      { name: '扫码授权', items: [
+        { text: 'hdata和ebk二码合一', p: 'p2', done: false },
+      ]},
+    ]
+  },
+  {
+    id: 'phase3', date: '8月3日', title: '网页版全业务开放+微信端商户灰度', target: '网页版→所有业务 | 微信端→所有业务+部分商户',
+    groups: [
+      { name: '微信会话-用户主动发', items: [
+        { text: '数据查询体验: 文+图+链接', p: 'p0', done: false },
+        { text: '经营诊断体验: 任务的展示问题', p: 'p0', done: false },
+      ]},
+      { name: '微信会话-平台主动推', items: [
+        { text: '服务主动订阅(数据日报/点评待回复)', p: 'p1', done: false },
+      ]},
+      { name: '兜底逻辑', items: [
+        { text: '报告、图片生成等', p: 'p1', done: false },
+      ]},
+      { name: '评测', items: [
+        { text: '专家模式评测集构建', p: 'p1', done: false },
+        { text: '执行评测打分', p: 'p1', done: false },
+      ]},
+    ]
+  },
+  {
+    id: 'phase4', date: '8月31日', title: 'EBK程管家全量上线', target: '所有商户 + 所有业务',
+    groups: [
+      { name: '专家模式', items: [
+        { text: '专家模式接入EBK', p: 'p2', done: false },
+        { text: '风控逻辑', p: 'p2', done: false },
+        { text: '兜底逻辑', p: 'p2', done: false },
+        { text: '专家模式首页推荐问', p: 'p2', done: false },
+        { text: '文件上传解析', p: 'p2', done: false },
+      ]},
+      { name: '会话体验(App+PC)', items: [
+        { text: '前端组件渲染', p: 'p2', done: false },
+      ]},
+      { name: '评测', items: [
+        { text: '专家模式评测集构建', p: 'p2', done: false },
+        { text: '执行评测打分', p: 'p2', done: false },
+      ]},
+    ]
+  },
+];
+
+let data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+let isRemoteUpdate = false;
+
+// ===== Firebase 实时同步 =====
+function setSyncStatus(connected) {
+  const el = document.getElementById('syncStatus');
+  if (connected) {
+    el.textContent = '🟢 已同步';
+    el.className = 'sync-status connected';
+  } else {
+    el.textContent = '🔴 离线';
+    el.className = 'sync-status disconnected';
+  }
+}
+
+// 监听远端数据变化 - 实时同步
+onValue(dataRef, (snapshot) => {
+  const val = snapshot.val();
+  if (val) {
+    isRemoteUpdate = true;
+    data = val;
+    render();
+    isRemoteUpdate = false;
+  }
+  setSyncStatus(true);
+}, (error) => {
+  console.error('Firebase error:', error);
+  setSyncStatus(false);
+});
+
+// 初始化：如果远端为空则写入默认数据
+get(dataRef).then((snapshot) => {
+  if (!snapshot.exists()) {
+    set(dataRef, DEFAULT_DATA);
+  }
+});
+
+function saveData() {
+  if (!isRemoteUpdate) {
+    set(dataRef, data);
+  }
+  updateProgress();
+}
+
+// ===== 渲染 =====
+function render() {
+  const container = document.getElementById('timeline');
+  container.innerHTML = '';
+  const phaseClasses = ['phase1','phase2','phase3','phase4'];
+  
+  data.forEach((phase, pi) => {
+    const div = document.createElement('div');
+    div.className = `phase ${phaseClasses[pi]}`;
+    
+    let groupsHtml = (phase.groups || []).map((g, gi) => {
+      const itemsHtml = (g.items || []).map((item, ii) => {
+        const doneClass = item.done ? 'done' : '';
+        const checked = item.done ? 'checked' : '';
+        return `<li class="item ${doneClass}">
+          <input type="checkbox" ${checked} onchange="window.toggleItem(${pi},${gi},${ii})">
+          <label><span class="priority ${item.p}">${item.p.toUpperCase()}</span>${item.text}</label>
+        </li>`;
+      }).join('');
+      
+      return `<div class="group">
+        <div class="group-header" onclick="window.toggleGroup(this)">
+          <span class="group-title">${g.name}</span>
+          <span class="group-toggle">▼</span>
+        </div>
+        <ul class="group-items">
+          ${itemsHtml}
+        </ul>
+        <div class="add-item">
+          <input type="text" placeholder="添加事项..." onkeydown="if(event.key==='Enter')window.addItem(${pi},${gi},this)">
+          <select><option value="p0">P0</option><option value="p1" selected>P1</option><option value="p2">P2</option></select>
+          <button onclick="window.addItem(${pi},${gi},this.parentElement.querySelector('input'))">+</button>
+        </div>
+      </div>`;
+    }).join('');
+    
+    div.innerHTML = `
+      <div class="phase-dot">M${pi+1}</div>
+      <div class="phase-date">${phase.date}</div>
+      <div class="phase-card">
+        <div class="phase-title">${phase.title}</div>
+        <div class="phase-target">面向: ${phase.target}</div>
+        ${groupsHtml}
+        <div class="add-group">
+          <button onclick="window.showAddGroup(${pi}, this)">+ 添加分组</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  
+  updateProgress();
+}
+
+// ===== 交互函数 =====
+window.toggleItem = function(pi, gi, ii) {
+  data[pi].groups[gi].items[ii].done = !data[pi].groups[gi].items[ii].done;
+  saveData();
+  render();
+};
+
+window.addItem = function(pi, gi, input) {
+  const text = input.value.trim();
+  if (!text) return;
+  const select = input.parentElement.querySelector('select');
+  const p = select.value;
+  if (!data[pi].groups[gi].items) data[pi].groups[gi].items = [];
+  data[pi].groups[gi].items.push({ text, p, done: false });
+  input.value = '';
+  saveData();
+  render();
+};
+
+window.showAddGroup = function(pi, btn) {
+  const container = btn.parentElement;
+  container.innerHTML = `<div class="add-group-form">
+    <input type="text" placeholder="分组名称..." autofocus onkeydown="if(event.key==='Enter')window.addGroup(${pi},this)">
+    <button onclick="window.addGroup(${pi},this.previousElementSibling)">确定</button>
+  </div>`;
+  container.querySelector('input').focus();
+};
+
+window.addGroup = function(pi, input) {
+  const name = input.value.trim();
+  if (!name) return;
+  if (!data[pi].groups) data[pi].groups = [];
+  data[pi].groups.push({ name, items: [] });
+  saveData();
+  render();
+};
+
+window.toggleGroup = function(header) {
+  const items = header.nextElementSibling;
+  const toggle = header.querySelector('.group-toggle');
+  if (items.classList.contains('collapsed')) {
+    items.classList.remove('collapsed');
+    toggle.textContent = '▼';
+  } else {
+    items.classList.add('collapsed');
+    toggle.textContent = '▶';
+  }
+};
+
+window.toggleAll = function() {
+  const allItems = document.querySelectorAll('.group-items');
+  const anyVisible = [...allItems].some(el => !el.classList.contains('collapsed'));
+  allItems.forEach(el => {
+    if (anyVisible) el.classList.add('collapsed');
+    else el.classList.remove('collapsed');
+  });
+  document.querySelectorAll('.group-toggle').forEach(el => {
+    el.textContent = anyVisible ? '▶' : '▼';
+  });
+};
+
+function updateProgress() {
+  let total = 0, done = 0;
+  data.forEach(phase => (phase.groups || []).forEach(g => (g.items || []).forEach(item => {
+    total++;
+    if (item.done) done++;
+  })));
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('progressText').textContent = `总进度: ${done}/${total} (${pct}%)`;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+window.exportData = function() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'tclaw_roadmap_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+};
+
+window.resetAll = function() {
+  if (confirm('⚠️ 确定要恢复默认数据吗？\n所有人的修改都会被重置！')) {
+    data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    saveData();
+    render();
+  }
+};
+
+// 初始渲染
+render();
+</script>
+</body>
+</html>
